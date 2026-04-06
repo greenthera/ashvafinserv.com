@@ -1397,6 +1397,24 @@ h4 { font-size: 1.1rem; font-weight: 600; }
     z-index: 1000;
   }
 
+  .logo {
+    gap: 8px;
+  }
+
+  .logo-img {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+
+  .logo-name {
+    font-size: 1rem;
+  }
+
+  .logo-tagline {
+    display: none;
+  }
+
   .nav-links.open {
     right: 0;
   }
