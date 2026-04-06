@@ -379,6 +379,14 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   line-height: 1.8;
 }
 
+.hero-tagline {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  margin: -16px 0 28px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
 .hero-buttons {
   display: flex;
   gap: 16px;
@@ -390,14 +398,26 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   display: flex;
   align-items: center;
   gap: 32px;
+  flex-wrap: wrap;
 }
 
 .stat {
   text-align: center;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
 }
 
 .stat-number {
-  display: block;
+  display: inline-block;
   font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: 700;
@@ -442,6 +462,7 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   box-shadow: var(--shadow-xl);
   position: relative;
   overflow: hidden;
+  animation: heroFloat 6s ease-in-out infinite;
 }
 
 .hero-card::before {
@@ -505,6 +526,11 @@ h4 { font-size: 1.1rem; font-weight: 600; }
 @keyframes scrollBounce {
   0%, 100% { top: 8px; opacity: 1; }
   50% { top: 22px; opacity: 0.3; }
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 /* ---------- ABOUT SECTION ---------- */
@@ -1225,7 +1251,7 @@ h4 { font-size: 1.1rem; font-weight: 600; }
 .whatsapp-float {
   position: fixed;
   bottom: 32px;
-  left: 32px;
+  right: 96px;
   width: 56px;
   height: 56px;
   background: #25D366;
@@ -1331,6 +1357,12 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
     gap: 32px;
+  }
+}
+
+@media (max-width: 900px) {
+  .stat-divider {
+    display: none;
   }
 }
 
@@ -1448,7 +1480,7 @@ h4 { font-size: 1.1rem; font-weight: 600; }
 
   .whatsapp-float {
     bottom: 20px;
-    left: 20px;
+    right: 74px;
     width: 50px;
     height: 50px;
     font-size: 1.4rem;
@@ -1513,6 +1545,158 @@ h4 { font-size: 1.1rem; font-weight: 600; }
 .nav-overlay.active {
   opacity: 1;
   visibility: visible;
+}
+
+/* ---------- LOGO IMAGE ---------- */
+.logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* ---------- FOUNDER PHOTO ---------- */
+.founder-photo {
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.founder-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---------- MISSION & VISION SECTION ---------- */
+.mission-vision {
+  background: var(--gray-50);
+}
+
+.vision-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  background: var(--white);
+  border-left: 4px solid var(--primary);
+  border-radius: 16px;
+  padding: 36px 40px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 0;
+}
+
+.vision-content h3 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.vision-content p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  font-style: italic;
+}
+
+.how-different-title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 0;
+}
+
+.pillar-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 36px 28px;
+  box-shadow: var(--shadow-sm);
+  border-top: 4px solid var(--primary);
+  position: relative;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.pillar-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.pillar-number {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary-lighter);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.pillar-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--primary-lighter);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+.pillar-card h4 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.pillar-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ---------- FOOTER BOTTOM LINK ---------- */
+.footer-bottom a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.footer-bottom a:hover {
+  color: var(--white);
+}
+
+/* ---------- MISSION/VISION RESPONSIVE ---------- */
+@media (max-width: 1024px) {
+  .pillars-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vision-block {
+    flex-direction: column;
+    padding: 28px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .vision-block {
+    padding: 24px 20px;
+  }
+
+  .how-different-title {
+    font-size: 1.3rem;
+  }
 }
 
 /* ---------- PRINT STYLES ---------- */

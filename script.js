@@ -1,5 +1,5 @@
 /* ============================================
-   ASHVĀ FINSERV — MAIN JAVASCRIPT
+   ASHVA FINSERV — MAIN JAVASCRIPT
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,9 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinkItems = document.querySelectorAll('.nav-link');
   const backToTop = document.getElementById('backToTop');
   const contactForm = document.getElementById('contactForm');
-  const formSuccess = document.getElementById('formSuccess');
   const animatedElements = document.querySelectorAll('[data-animate]');
   const statNumbers = document.querySelectorAll('.stat-number');
+  const currentYear = document.getElementById('currentYear');
+
+  if (currentYear) {
+    currentYear.textContent = new Date().getFullYear();
+  }
 
   /* ---------- MOBILE NAV OVERLAY ---------- */
   const overlay = document.createElement('div');
@@ -165,35 +169,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- CONTACT FORM HANDLING ---------- */
+  /* ---------- CONTACT FORM HANDLING (WhatsApp redirect) ---------- */
   contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // Basic validation
     const name = contactForm.querySelector('#name').value.trim();
-    const phone = contactForm.querySelector('#phone').value.trim();
-    const email = contactForm.querySelector('#email').value.trim();
+    const service = contactForm.querySelector('#service').value.trim();
+    const message = contactForm.querySelector('#message').value.trim();
 
-    if (!name || !phone || !email) {
-      return;
-    }
+    if (!name) return;
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return;
-    }
+    const serviceText = service || 'Not specified';
+    const messageText = message || 'No additional message';
 
-    // Show success message
-    contactForm.classList.add('hidden');
-    formSuccess.classList.remove('hidden');
+    const text = `Hi Ashva Finserv! I would like to enquire about your services.\n\n*Name:* ${name}\n*Service Interested In:* ${serviceText}\n*Message:* ${messageText}`;
 
-    // Reset form after delay
-    setTimeout(() => {
-      contactForm.reset();
-      contactForm.classList.remove('hidden');
-      formSuccess.classList.add('hidden');
-    }, 5000);
+    const encoded = encodeURIComponent(text);
+    window.location.href = `https://wa.me/919327620268?text=${encoded}`;
   });
 
   /* ---------- CLOSE MOBILE MENU ON ESCAPE ---------- */
