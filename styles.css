@@ -1830,17 +1830,13 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   font-style: italic;
 }
 
-.da-highlight {
-  max-width: 1000px;
-  margin: 0 auto 32px;
-  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
-  border-radius: var(--radius-lg);
-  padding: 40px 44px;
-  box-shadow: var(--shadow-xl);
+.da-highlight-band {
+  background: var(--primary-dark);
+  padding: 64px 0;
   text-align: center;
 }
 
-.da-highlight .how-different-title {
+.da-highlight-band .how-different-title {
   color: var(--white);
   margin-bottom: 28px;
 }
@@ -2128,8 +2124,8 @@ h4 { font-size: 1.1rem; font-weight: 600; }
     text-align: center;
   }
 
-  .da-highlight {
-    padding: 28px 24px;
+  .da-highlight-band {
+    padding: 40px 0;
   }
 
   .da-highlight-grid {
