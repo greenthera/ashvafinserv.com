@@ -1895,17 +1895,6 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   line-height: 1.7;
 }
 
-.da-disclaimer p.da-disclaimer-lead,
-.da-disclaimer p.da-disclaimer-note {
-  font-style: italic;
-  font-size: 0.8rem;
-  color: var(--primary-dark);
-}
-
-.da-disclaimer-note {
-  margin-top: 12px;
-}
-
 .da-closing-cta {
   text-align: center;
   max-width: 720px;
