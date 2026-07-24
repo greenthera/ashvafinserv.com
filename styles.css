@@ -1830,6 +1830,49 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   font-style: italic;
 }
 
+.da-highlight {
+  max-width: 1000px;
+  margin: 0 auto 32px;
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  border-radius: var(--radius-lg);
+  padding: 40px 44px;
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+}
+
+.da-highlight .how-different-title {
+  color: var(--white);
+  margin-bottom: 28px;
+}
+
+.da-highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 40px;
+  text-align: left;
+}
+
+.da-highlight-item {
+  padding-left: 18px;
+  border-left: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.da-highlight-num {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.da-highlight-item p {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
 .da-intro {
   max-width: 760px;
   margin: 0 auto 56px;
@@ -1842,10 +1885,91 @@ h4 { font-size: 1.1rem; font-weight: 600; }
 }
 
 .da-steps {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 16px;
   margin-bottom: 56px;
+  padding: 32px 20px 20px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(120deg, var(--primary-lighter) 0%, var(--accent-light) 100%);
+  overflow: visible;
+}
+
+.da-steps::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 6%;
+  right: 6%;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+  background-size: 200% 100%;
+  animation: daStepsShimmer 6s linear infinite;
+}
+
+@keyframes daStepsShimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .da-steps::before {
+    animation: none;
+  }
+}
+
+.da-step {
+  position: relative;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius);
+  padding: 20px 18px 16px;
+  box-shadow: 0 8px 20px rgba(27, 107, 42, 0.1);
+  transition: all var(--transition);
+}
+
+.da-step:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(27, 107, 42, 0.18);
+}
+
+.da-step-badge {
+  position: absolute;
+  top: -16px;
+  left: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(27, 107, 42, 0.35);
+}
+
+.da-step:nth-of-type(even) .da-step-badge {
+  background: linear-gradient(145deg, var(--accent), #a5822f);
+  box-shadow: 0 4px 12px rgba(200, 169, 81, 0.4);
+}
+
+.da-step h4 {
+  margin: 12px 0 6px;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.da-step p {
+  font-size: 0.88rem;
+  color: var(--text-light);
 }
 
 .da-step-usage-list {
@@ -1877,6 +2001,60 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   grid-template-columns: repeat(7, 1fr);
   gap: 20px;
   margin-bottom: 56px;
+}
+
+.da-eligibility-item {
+  position: relative;
+  text-align: center;
+  padding: 8px 4px 14px;
+  transition: transform var(--transition);
+}
+
+.da-eligibility-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: all var(--transition);
+  transform: translateX(-50%);
+}
+
+.da-eligibility-item:hover {
+  transform: translateY(-4px);
+}
+
+.da-eligibility-item:hover::after {
+  width: 60%;
+}
+
+.da-eligibility-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  background: linear-gradient(145deg, var(--primary-lighter), rgba(200, 169, 81, 0.15));
+  color: var(--primary);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  transition: all var(--transition);
+}
+
+.da-eligibility-item:hover .da-eligibility-icon {
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  color: var(--white);
+  transform: rotate(-6deg);
+}
+
+.da-eligibility-item h4 {
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--dark);
 }
 
 .da-disclaimer {
@@ -1919,6 +2097,7 @@ h4 { font-size: 1.1rem; font-weight: 600; }
 @media (max-width: 1024px) {
   .da-steps {
     grid-template-columns: repeat(2, 1fr);
+    padding: 32px 24px 24px;
   }
 
   .da-benefits-grid {
@@ -1947,6 +2126,15 @@ h4 { font-size: 1.1rem; font-weight: 600; }
     max-width: 380px;
     white-space: normal;
     text-align: center;
+  }
+
+  .da-highlight {
+    padding: 28px 24px;
+  }
+
+  .da-highlight-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 }
 
