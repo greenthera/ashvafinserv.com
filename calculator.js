@@ -170,7 +170,7 @@ function renderPlanner() {
   document.querySelector("#sipProjection tbody").innerHTML =
     sipRows ||
     '<tr><td colspan="5" class="empty">Enter DOB, today’s date and retirement age.</td></tr>';
-  drawLineChart("sipChart", sipPoints, "#1677ff");
+  drawLineChart("sipChart", sipPoints, "#1B6B2A");
 
   renderSwp(corpus, inflation);
 }
@@ -209,7 +209,7 @@ function renderSwp(startingCorpus, inflation) {
   document.querySelector("#swpProjection tbody").innerHTML =
     swpRows ||
     '<tr><td colspan="5" class="empty">Your SIP corpus will appear here.</td></tr>';
-  drawLineChart("swpChart", swpPoints, "#10a879");
+  drawLineChart("swpChart", swpPoints, "#C8A951");
 }
 
 function renderLoan() {
@@ -255,7 +255,7 @@ function renderLoan() {
   setText("loanTotal", money.format(loanAmount + totalInterest));
   document.querySelector("#loanProjection tbody").innerHTML =
     loanRows || '<tr><td colspan="5" class="empty">Enter a loan tenure.</td></tr>';
-  drawLineChart("loanChart", loanPoints, "#f59f00", 12);
+  drawLineChart("loanChart", loanPoints, "#1B6B2A", 12);
 }
 
 const pdfAmount = (text) => String(text).replaceAll("₹", "Rs. ").replaceAll("•", "|");
