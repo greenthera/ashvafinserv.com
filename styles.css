@@ -677,6 +677,132 @@ h4 { font-size: 1.1rem; font-weight: 600; }
   line-height: 1.7;
 }
 
+/* ---------- CALCULATORS SECTION ---------- */
+.calculators {
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  position: relative;
+  overflow: hidden;
+}
+
+.calculators::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 50%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 90% 30%, rgba(200, 169, 81, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.calculators .container {
+  position: relative;
+}
+
+.calculators .section-tag {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+}
+
+.calculators h2 {
+  color: var(--white);
+}
+
+.calculators .section-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.calculator-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+.calculator-card {
+  display: block;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 44px 36px;
+  text-align: center;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.calculator-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transform: scaleX(0);
+  transition: transform var(--transition);
+}
+
+.calculator-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+  border-color: transparent;
+}
+
+.calculator-card:hover::after {
+  transform: scaleX(1);
+}
+
+.calculator-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: var(--white);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  transition: all var(--transition);
+}
+
+.calculator-card:hover .calculator-icon {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.calculator-card h3 {
+  margin-bottom: 12px;
+}
+
+.calculator-card p {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.calculator-cta {
+  pointer-events: none;
+}
+
+.calculator-card:hover .calculator-cta {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(27, 107, 42, 0.3);
+}
+
+@media (max-width: 768px) {
+  .calculator-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-card {
+    padding: 32px 24px;
+  }
+}
+
 /* ---------- WHY US SECTION ---------- */
 .why-us {
   background: var(--white);
