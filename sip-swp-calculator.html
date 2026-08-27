@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Plan your SIP investments and SWP withdrawals with year-wise projections and inflation-adjusted corpus values. Free SIP & SWP calculator by Ashva Finserv — download a detailed PDF report.">
+    <meta name="keywords" content="SIP calculator, SWP calculator, systematic investment plan calculator, systematic withdrawal plan calculator, retirement corpus calculator, Ashva Finserv">
+    <meta name="author" content="Ashva Finserv">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ashvafinserv.com/sip-swp-calculator.html">
+
+    <meta property="og:title" content="SIP &amp; SWP Calculator | Ashva Finserv">
+    <meta property="og:description" content="Plan your SIP investments and SWP withdrawals with year-wise, inflation-adjusted projections — with a downloadable PDF report.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ashvafinserv.com/sip-swp-calculator.html">
+    <meta property="og:site_name" content="Ashva Finserv">
+    <meta property="og:locale" content="en_IN">
+    <meta property="og:image" content="https://ashvafinserv.com/images/logo.svg">
+    <meta property="og:image:alt" content="Ashva Finserv Logo">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="SIP &amp; SWP Calculator | Ashva Finserv">
+    <meta name="twitter:description" content="Plan your SIP investments and SWP withdrawals with year-wise, inflation-adjusted projections — with a downloadable PDF report.">
+    <meta name="twitter:image" content="https://ashvafinserv.com/images/logo.svg">
+    <title>SIP &amp; SWP Calculator | Ashva Finserv</title>
+
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- ========== HEADER / NAVBAR ========== -->
+    <header id="header" class="header">
+        <nav class="navbar container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.svg" alt="Ashva Finserv Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-name">Ashva Finserv</span>
+                    <span class="logo-tagline">Your Trust, Our Expertise</span>
+                </div>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#services" class="nav-link">Services</a></li>
+                <li><a href="index.html#home-loan" class="nav-link">Home Loan</a></li>
+                <li><a href="index.html#why-us" class="nav-link">Why Us</a></li>
+                <li><a href="index.html#mission-vision" class="nav-link">Vision</a></li>
+                <li><a href="index.html#founder" class="nav-link">Founder</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+
+            <a href="index.html#contact" class="btn btn-primary nav-cta">Book Consultation</a>
+
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+    <main class="page">
+        <p class="eyebrow">SIP &amp; SWP calculator</p>
+        <h1>Investment and withdrawal planner</h1>
+        <p class="intro">The highlighted Excel parameters are form inputs. All other entries calculate automatically.
+        </p>
+        <div id="profileBar" class="profile-bar" hidden>
+            <div class="avatar" id="profileAvatar">A</div>
+            <div class="profile-info">
+                <strong id="profileName">—</strong>
+                <div class="profile-meta">
+                    <span id="profilePhone" class="meta-item"><i class="fas fa-phone"></i><span class="meta-text"></span></span>
+                    <span id="profileEmail" class="meta-item"><i class="fas fa-envelope"></i><span class="meta-text"></span></span>
+                </div>
+            </div>
+        </div>
+        <div class="grid">
+            <section class="card form-card">
+                <h2>Parameters</h2>
+                <p class="sub">Fill the highlighted values.</p>
+                <div class="form-section">
+                    <h3>Your details</h3>
+                    <div class="field"><label>Full name</label><input id="clientName" type="text"
+                            placeholder="e.g. Ananya Sharma" autocomplete="name"></div>
+                    <div class="field"><label>Phone</label><input id="clientPhone" type="tel" inputmode="tel"
+                            placeholder="98765 43210" autocomplete="tel"></div>
+                    <div class="field"><label>Email</label><input id="clientEmail" type="email" inputmode="email"
+                            placeholder="you@example.com" autocomplete="email"></div>
+                </div>
+                <div class="form-section">
+                    <h3>SIP</h3>
+                    <div class="field"><label>Monthly SIP <span>₹</span></label><input id="monthlySip" type="number"
+                            inputmode="numeric" value="10000"></div>
+                    <div class="field"><label>Yearly Increment <span>%</span></label><input id="sipIncrease"
+                            type="number" inputmode="decimal" value="10"></div>
+                    <div class="field"><label>ROI <span>%</span></label><input id="sipRoi" type="number"
+                            inputmode="decimal" value="15">
+                    </div>
+                    <div class="field"><label>DOB</label><input id="dob" type="datetime-local"
+                            value="1991-03-25T00:00"></div>
+                    <div class="field"><label>Today's date</label><input id="today" type="datetime-local"
+                            value="2026-08-26T00:00">
+                    </div>
+                    <div class="field"><label>Retirement <span>age</span></label><input id="retirement" type="number"
+                            inputmode="numeric" value="60"></div>
+                    <div class="field"><label>Inflation <span>%</span></label><input id="inflation" type="number"
+                            inputmode="decimal" value="6"></div>
+                </div>
+                <div class="form-section">
+                    <h3>SWP</h3>
+                    <div class="field"><label>SWP Amount <span>monthly ₹</span></label><input id="swpAmount"
+                            type="number" inputmode="numeric" value="300000"></div>
+                    <div class="field"><label>Yearly Increment <span>%</span></label><input id="swpIncrease"
+                            type="number" inputmode="decimal" value="5"></div>
+                    <div class="field"><label>ROI <span>%</span></label><input id="swpRoi" type="number"
+                            inputmode="decimal" value="7">
+                    </div>
+                </div>
+                <p class="tip">SIP corpus at retirement automatically becomes the SWP starting corpus.</p>
+                <button class="btn btn-primary" data-pdf="planner"><i class="fas fa-download"></i> Download Report</button>
+            </section>
+            <section class="results">
+                <div class="card summary">
+                    <div class="metric">
+                        <p>Current age</p><strong id="currentAge">—</strong>
+                    </div>
+                    <div class="metric primary">
+                        <p>SIP corpus at retirement</p><strong id="futureValue">—</strong>
+                    </div>
+                    <div class="metric success">
+                        <p>Investment period</p><strong id="investYears">—</strong>
+                    </div>
+                </div>
+                <div class="stack">
+                    <div class="card chart-card">
+                        <div class="results-head"><div><h2>SIP corpus growth</h2><p>Projected corpus through retirement</p></div></div>
+                        <canvas id="sipChart" aria-label="SIP corpus growth chart"></canvas>
+                    </div>
+                    <div class="card table-card">
+                        <div class="results-head">
+                            <div>
+                                <h2>SIP year-wise calculation</h2>
+                                <p>Total invested: <strong id="totalInvested">—</strong></p>
+                            </div><span class="badge">SIP</span>
+                        </div>
+                        <div class="scroll">
+                            <table id="sipProjection">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Age</th>
+                                        <th>Monthly SIP</th>
+                                        <th>Corpus at year end</th>
+                                        <th>Inflation adjusted</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card summary cols-2">
+                        <div class="metric">
+                            <p>SWP starting corpus</p><strong id="swpCorpus">—</strong>
+                        </div>
+                        <div class="metric primary">
+                            <p>Total withdrawal</p><strong id="totalWithdrawal">—</strong>
+                        </div>
+                    </div>
+                    <div class="card chart-card">
+                        <div class="results-head"><div><h2>SWP corpus balance</h2><p>Projected balance after withdrawals</p></div></div>
+                        <canvas id="swpChart" aria-label="SWP corpus balance chart"></canvas>
+                    </div>
+                    <div class="card table-card">
+                        <div class="results-head">
+                            <div>
+                                <h2>SWP year-wise calculation</h2>
+                                <p>Withdrawal increases every year.</p>
+                            </div><span class="badge">SWP</span>
+                        </div>
+                        <div class="scroll">
+                            <table id="swpProjection">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Opening corpus</th>
+                                        <th>Monthly SWP</th>
+                                        <th>Corpus at year end</th>
+                                        <th>Inflation adjusted</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="images/logo.svg" alt="Ashva Finserv Logo" class="logo-img">
+                        <div class="logo-text">
+                            <span class="logo-name">Ashva Finserv</span>
+                            <span class="logo-tagline">Your Trust, Our Expertise</span>
+                        </div>
+                    </a>
+                    <p class="footer-desc">Building financial confidence for every stage of life. Trusted financial advisory in Surat, Gujarat.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/ashva_finserv/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/deepshah5005/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="mailto:contact@ashvafinserv.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:+919327620268" aria-label="Phone"><i class="fas fa-phone"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#why-us">Why Us</a></li>
+                        <li><a href="index.html#mission-vision">Vision</a></li>
+                        <li><a href="index.html#founder">Founder</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Our Services</h4>
+                    <ul>
+                        <li><a href="index.html#services">Insurance Advisory</a></li>
+                        <li><a href="index.html#services">Investment Planning</a></li>
+                        <li><a href="index.html#services">Retirement Planning</a></li>
+                        <li><a href="index.html#services">Tax Planning</a></li>
+                        <li><a href="index.html#services">Estate Planning</a></li>
+                        <li><a href="index.html#services">Home Loan</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Contact</h4>
+                    <ul class="footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> 1/A Kantareshwar Appt., Near Kapadia Health Club, Majura, Surat 395002</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+919327620268">+91 93276 20268</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:contact@ashvafinserv.com">contact@ashvafinserv.com</a></li>
+                        <li><i class="fas fa-globe"></i> <a href="https://www.ashvafinserv.com">www.ashvafinserv.com</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2005-<span id="currentYear"></span> Ashva Finserv. All Rights Reserved.</p>
+                <p>Developed by <a href="https://shivantra.com" target="_blank" rel="noopener">Shivantra</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== BACK TO TOP ========== -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- ========== WHATSAPP FLOAT ========== -->
+    <a href="https://wa.me/919327620268?text=Hi%2C%20I%20would%20like%20to%20know%20more%20about%20Ashva%20Finserv%20services."
+       class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="location.js"></script>
+    <script>window.mode = 'planner'</script>
+    <script src="calculator.js"></script>
+</body>
+
+</html>
