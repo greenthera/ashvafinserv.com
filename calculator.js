@@ -260,6 +260,14 @@ function renderLoan() {
 
 const pdfAmount = (text) => String(text).replaceAll("₹", "Rs. ").replaceAll("•", "|");
 
+function slugifyFileName(name) {
+  return String(name)
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function formatDateTime(datetimeLocalValue) {
   if (!datetimeLocalValue) return "";
 
@@ -283,6 +291,7 @@ const pdfBrand = {
   accent: [200, 169, 81],
   muted: [105, 120, 135],
   ink: [35, 49, 64],
+  shivantra: [1, 1, 79],
 };
 
 let bannerImagePromise;
@@ -307,33 +316,41 @@ function drawPdfFooter(pdf, pageNumber, totalPages, tagline) {
   pdf.line(15, 286, 195, 286);
 
   pdf.setFontSize(8);
+
+  // Left: tagline + brand name (width measured at its own normal weight,
+  // not the bold weight the brand name switches to right after).
   pdf.setFont(undefined, "normal");
   pdf.setTextColor(...pdfBrand.muted);
+  const taglinePrefixWidth = pdf.getTextWidth(taglinePrefix);
   pdf.text(taglinePrefix, 15, 291);
   pdf.setFont(undefined, "bold");
   pdf.setTextColor(...pdfBrand.teal);
-  pdf.textWithLink(brandName, 15 + pdf.getTextWidth(taglinePrefix), 291, {
+  pdf.textWithLink(brandName, 15 + taglinePrefixWidth, 291, {
     url: "https://www.ashvafinserv.com",
   });
 
+  // Center: page number
+  pdf.setFont(undefined, "normal");
+  pdf.setTextColor(...pdfBrand.muted);
+  pdf.text(`Page ${pageNumber} of ${totalPages}`, 105, 291, { align: "center" });
+
+  // Right: "Developed by Shivantra", right-aligned as a unit
   const devPrefix = "Developed by ";
   const devName = "Shivantra";
   pdf.setFont(undefined, "normal");
   const devPrefixWidth = pdf.getTextWidth(devPrefix);
   pdf.setFont(undefined, "bold");
   const devNameWidth = pdf.getTextWidth(devName);
-  const devX = 105 - (devPrefixWidth + devNameWidth) / 2;
+  const devX = 195 - (devPrefixWidth + devNameWidth);
 
   pdf.setFont(undefined, "normal");
   pdf.setTextColor(...pdfBrand.muted);
   pdf.text(devPrefix, devX, 291);
   pdf.setFont(undefined, "bold");
-  pdf.setTextColor(...pdfBrand.accent);
+  pdf.setTextColor(...pdfBrand.shivantra);
   pdf.textWithLink(devName, devX + devPrefixWidth, 291, { url: "https://shivantra.com/" });
 
   pdf.setFont(undefined, "normal");
-  pdf.setTextColor(...pdfBrand.muted);
-  pdf.text(`Page ${pageNumber} of ${totalPages}`, 195, 291, { align: "right" });
 }
 
 function ensurePdfSpace(pdf, cursorY, neededHeight, top = 20) {
@@ -639,15 +656,17 @@ async function downloadPdfReport(kind) {
   }
 
   const tagline = isLoan
-    ? "Amortization Calculator - Ashva Finserv"
-    : "SIP & SWP Calculator - Ashva Finserv";
+    ? "Amortization Calculator by Ashva Finserv"
+    : "SIP & SWP Calculator by Ashva Finserv";
   const totalPages = pdf.internal.getNumberOfPages();
   for (let page = 1; page <= totalPages; page += 1) {
     pdf.setPage(page);
     drawPdfFooter(pdf, page, totalPages, tagline);
   }
 
-  pdf.save(isLoan ? "loan-repayment-report.pdf" : "sip-swp-financial-plan.pdf");
+  const baseName = isLoan ? "loan-repayment-report" : "sip-swp-financial-plan";
+  const namePrefix = slugifyFileName(clientName || "");
+  pdf.save(`${namePrefix ? `${namePrefix}-` : ""}${baseName}.pdf`);
 }
 
 function setMeta(id, value) {
