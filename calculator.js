@@ -348,7 +348,9 @@ function drawPdfFooter(pdf, pageNumber, totalPages, tagline) {
   pdf.text(devPrefix, devX, 291);
   pdf.setFont(undefined, "bold");
   pdf.setTextColor(...pdfBrand.shivantra);
-  pdf.textWithLink(devName, devX + devPrefixWidth, 291, { url: "https://shivantra.com/" });
+  pdf.textWithLink(devName, devX + devPrefixWidth, 291, {
+    url: "https://shivantra.com/?utm_source=ashvafinserv.com&utm_medium=referral&utm_campaign=client_pdf_footer",
+  });
 
   pdf.setFont(undefined, "normal");
 }
