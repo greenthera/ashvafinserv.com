@@ -25,7 +25,7 @@ export default function Header({ homeHref = '' }) {
       >
         <nav className="max-w-[1200px] mx-auto px-6 flex items-center justify-between h-20">
           <a href={homeHref || '#hero'} className="flex items-center gap-2.5 z-[1]">
-            <img src="/images/logo.svg" alt="Ashva Finserv Logo" className="w-11 h-11 object-contain rounded-[10px]" />
+            <img src={`${import.meta.env.BASE_URL}images/logo.svg`} alt="Ashva Finserv Logo" className="w-11 h-11 object-contain rounded-[10px]" />
             <div className="flex flex-col">
               <span className="font-heading font-bold text-[1.2rem] text-ink leading-tight">Ashva Finserv</span>
               <span className="text-[0.7rem] text-body-light tracking-wide lg:block hidden">Your Trust, Our Expertise</span>
@@ -39,7 +39,7 @@ export default function Header({ homeHref = '' }) {
             }`}
           >
             <li className="flex items-center gap-2.5 w-full pb-[18px] mb-2 border-b border-border lg:hidden">
-              <img src="/images/logo.svg" alt="Ashva Finserv Logo" className="w-11 h-11 object-contain rounded-[10px]" />
+              <img src={`${import.meta.env.BASE_URL}images/logo.svg`} alt="Ashva Finserv Logo" className="w-11 h-11 object-contain rounded-[10px]" />
               <span className="font-heading font-bold text-[1.2rem] text-ink">Ashva Finserv</span>
             </li>
 

@@ -7,7 +7,7 @@ import ProfileBar from './ProfileBar.jsx';
 export default function CalculatorShell({ eyebrow, title, intro, profile, formCard, results }) {
   return (
     <>
-      <Header homeHref="/" />
+      <Header homeHref={import.meta.env.BASE_URL} />
       <main className="max-w-[1380px] mx-auto px-5 pt-[110px] sm:pt-[122px] pb-[30px] sm:pb-[60px]">
         <p className="text-primary text-xs font-extrabold tracking-[1.3px] uppercase mb-2">{eyebrow}</p>
         <h1 className="text-[29px] sm:text-[clamp(28px,3vw,40px)] -tracking-[1.3px] mb-2">{title}</h1>
@@ -20,7 +20,7 @@ export default function CalculatorShell({ eyebrow, title, intro, profile, formCa
           <section className="results min-w-0">{results}</section>
         </div>
       </main>
-      <Footer homeHref="/" />
+      <Footer homeHref={import.meta.env.BASE_URL} />
       <BackToTop />
       <WhatsAppFloat />
     </>

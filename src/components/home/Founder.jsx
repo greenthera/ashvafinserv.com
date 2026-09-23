@@ -15,7 +15,11 @@ export default function Founder() {
         >
           <div className="text-center">
             <div className="w-[180px] h-[180px] mx-auto mb-5 rounded-full overflow-hidden shadow-brand-lg">
-              <img src="/images/founder.jpeg" alt="Deep Shah — Founder & CEO, Ashva Finserv" className="w-full h-full object-cover" />
+              <img
+                src={`${import.meta.env.BASE_URL}images/founder.jpeg`}
+                alt="Deep Shah — Founder & CEO, Ashva Finserv"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="flex flex-wrap gap-2 justify-center">
               {credentials.map((cred) => (

@@ -22,7 +22,7 @@ function loadBannerImage() {
       const img = new Image();
       img.onload = () => resolve(img);
       img.onerror = reject;
-      img.src = '/images/ashva-finserv-banner.png';
+      img.src = `${import.meta.env.BASE_URL}images/ashva-finserv-banner.png`;
     });
   }
   return bannerImagePromise;

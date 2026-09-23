@@ -10,7 +10,7 @@ export default function Footer({ homeHref = '' }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-10 pb-14">
           <div>
             <a href={homeHref || '#hero'} className="flex items-center gap-2.5 mb-5">
-              <img src="/images/logo.svg" alt="Ashva Finserv Logo" className="w-11 h-11 object-contain rounded-[10px]" />
+              <img src={`${import.meta.env.BASE_URL}images/logo.svg`} alt="Ashva Finserv Logo" className="w-11 h-11 object-contain rounded-[10px]" />
               <div className="flex flex-col">
                 <span className="font-heading font-bold text-[1.2rem] text-white">Ashva Finserv</span>
                 <span className="text-[0.7rem] text-white/60 tracking-wide">Your Trust, Our Expertise</span>

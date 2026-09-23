@@ -116,13 +116,13 @@ export const daEligibility = [
 
 export const calculatorCards = [
   {
-    href: '/sip-swp-calculator',
+    href: `${import.meta.env.BASE_URL}sip-swp-calculator`,
     icon: 'fa-chart-line',
     title: 'SIP & SWP Calculator',
     text: 'Plan your SIP investments and SWP withdrawals with year-wise, inflation-adjusted projections.',
   },
   {
-    href: '/amortization-calculator',
+    href: `${import.meta.env.BASE_URL}amortization-calculator`,
     icon: 'fa-house-chimney',
     title: 'Amortization Calculator',
     text: 'Calculate your home loan EMI, total interest, and full month-by-month repayment schedule.',
