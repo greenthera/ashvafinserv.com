@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ashva Finserv</title>
+  <script>
+    // GitHub Pages doesn't support client-side routing natively.
+    // This stashes the requested path and redirects to index.html,
+    // which restores it via history.replaceState before React mounts.
+    var path = location.pathname + location.search + location.hash;
+    sessionStorage.setItem('spa-redirect', path);
+    location.replace('/');
+  </script>
+</head>
+<body></body>
+</html>
