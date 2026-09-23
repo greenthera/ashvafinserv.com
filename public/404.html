@@ -9,7 +9,7 @@
     // which restores it via history.replaceState before React mounts.
     // This file is static (not processed by Vite), so the base path below
     // must be kept in sync by hand with `base` in vite.config.js.
-    var basePath = '/ashvafinserv.com/';
+    var basePath = '/';
     var path = location.pathname + location.search + location.hash;
     sessionStorage.setItem('spa-redirect', path);
     location.replace(basePath);
