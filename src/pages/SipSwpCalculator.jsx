@@ -8,6 +8,7 @@ import ChartCard from '../components/calculator/ChartCard.jsx';
 import useLineChart from '../hooks/useLineChart.js';
 import { computeSipSwp, money } from '../lib/financeMath.js';
 import { blockInvalidNumberKeys, validateClientDetails } from '../lib/formUtils.js';
+import { submitSipSwpLead } from '../lib/googleFormLead.js';
 
 const SEO = {
   title: 'SIP & SWP Calculator | Ashva Finserv',
@@ -25,6 +26,22 @@ export default function SipSwpCalculator() {
   const [clientEmail, setClientEmail] = useState('');
   const [clientErrors, setClientErrors] = useState({});
   const clientDetailsRef = useRef(null);
+  const lastSubmittedLeadRef = useRef('');
+
+  // Silently logs "Your details" as a lead once it's valid — no submit
+  // button, debounced so it only fires after the user pauses typing.
+  useEffect(() => {
+    if (Object.keys(validateClientDetails({ clientName, clientPhone, clientEmail })).length > 0) return undefined;
+
+    const timer = setTimeout(() => {
+      const signature = `${clientName}|${clientPhone}|${clientEmail}`;
+      if (lastSubmittedLeadRef.current === signature) return;
+      lastSubmittedLeadRef.current = signature;
+      submitSipSwpLead({ clientName, clientPhone, clientEmail });
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [clientName, clientPhone, clientEmail]);
 
   const [monthlySip, setMonthlySip] = useState(10000);
   const [sipIncrease, setSipIncrease] = useState(10);
@@ -126,10 +143,11 @@ export default function SipSwpCalculator() {
               label="Phone"
               type="tel"
               inputMode="tel"
-              placeholder="98765 43210"
+              placeholder="9876543210"
               autoComplete="tel"
               required
               error={clientErrors.clientPhone}
+              hint="Accepts a 10-digit mobile number, with or without spaces, dashes, or a +91 prefix."
               value={clientPhone}
               onChange={(e) => {
                 setClientPhone(e.target.value);
@@ -145,6 +163,7 @@ export default function SipSwpCalculator() {
               autoComplete="email"
               required
               error={clientErrors.clientEmail}
+              hint="Accepts any valid email address, e.g. name@example.com."
               value={clientEmail}
               onChange={(e) => {
                 setClientEmail(e.target.value);

@@ -1,7 +1,7 @@
 const inputClasses =
   'w-full [appearance:textfield] border rounded-lg px-3 py-[11px] font-inherit text-[15px] text-ink outline-none bg-white transition-all focus:shadow-[0_0_0_3px_rgba(27,107,42,0.15)]';
 
-export default function Field({ label, unit, id, readOnly = false, required = false, error, ...inputProps }) {
+export default function Field({ label, unit, id, readOnly = false, required = false, error, hint, ...inputProps }) {
   return (
     <div className="mb-[15px]">
       <label htmlFor={id} className="flex gap-1 text-[13px] font-bold mb-[7px]">
@@ -17,10 +17,12 @@ export default function Field({ label, unit, id, readOnly = false, required = fa
         }`}
         {...inputProps}
       />
-      {error && (
+      {error ? (
         <p id={`${id}-error`} className="text-red-500 text-xs mt-1.5">
           {error}
         </p>
+      ) : (
+        hint && <p className="text-body-light text-xs mt-1.5">{hint}</p>
       )}
     </div>
   );
