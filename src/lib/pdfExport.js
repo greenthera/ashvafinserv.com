@@ -8,12 +8,9 @@ const pdfBrand = {
   accent: [200, 169, 81],
   muted: [105, 120, 135],
   ink: [35, 49, 64],
-  shivantra: [1, 1, 79],
 };
 
-// jsPDF's built-in fonts don't include the ₹ glyph, so it's swapped for "Rs." before drawing.
-const pdfAmount = (text) => String(text).replaceAll('₹', 'Rs. ').replaceAll('•', '|');
-const fmt = (value) => pdfAmount(money.format(Math.round(value)));
+const fmt = (value) => money.format(Math.round(value));
 
 let bannerImagePromise;
 function loadBannerImage() {
@@ -26,6 +23,32 @@ function loadBannerImage() {
     });
   }
   return bannerImagePromise;
+}
+
+function arrayBufferToBase64(buffer) {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
+// jsPDF's built-in fonts don't include the ₹ glyph, so a subset of Inter
+// (just the characters this PDF actually uses) is embedded instead.
+let pdfFontsPromise;
+function loadPdfFonts() {
+  if (!pdfFontsPromise) {
+    pdfFontsPromise = Promise.all([
+      fetch(`${import.meta.env.BASE_URL}fonts/Inter-Regular.ttf`).then((res) => res.arrayBuffer()),
+      fetch(`${import.meta.env.BASE_URL}fonts/Inter-Bold.ttf`).then((res) => res.arrayBuffer()),
+    ]).then(([regular, bold]) => ({
+      regular: arrayBufferToBase64(regular),
+      bold: arrayBufferToBase64(bold),
+    }));
+  }
+  return pdfFontsPromise;
 }
 
 function drawPdfFooter(pdf, pageNumber, totalPages, tagline) {
@@ -62,7 +85,7 @@ function drawPdfFooter(pdf, pageNumber, totalPages, tagline) {
   pdf.setTextColor(...pdfBrand.muted);
   pdf.text(devPrefix, devX, 291);
   pdf.setFont(undefined, 'bold');
-  pdf.setTextColor(...pdfBrand.shivantra);
+  pdf.setTextColor(...pdfBrand.teal);
   pdf.textWithLink(devName, devX + devPrefixWidth, 291, {
     url: 'https://shivantra.com/?utm_source=ashvafinserv.com&utm_medium=referral&utm_campaign=client_pdf_footer',
   });
@@ -86,7 +109,7 @@ function addStatsRow(pdf, cursorY, stats) {
     head: [stats.map((stat) => stat.label)],
     body: [stats.map((stat) => stat.value)],
     theme: 'grid',
-    styles: { halign: 'center', fontSize: 8, cellPadding: 3, textColor: pdfBrand.ink },
+    styles: { font: 'Inter', halign: 'center', fontSize: 8, cellPadding: 3, textColor: pdfBrand.ink },
     headStyles: { fillColor: [244, 248, 247], textColor: pdfBrand.muted, fontStyle: 'normal', fontSize: 7 },
     bodyStyles: { fontStyle: 'bold', fontSize: 11, textColor: pdfBrand.teal },
   });
@@ -134,7 +157,7 @@ function addTableSection(pdf, cursorY, title, head, body) {
     head: [head],
     body,
     theme: 'striped',
-    styles: { fontSize: 7.5 },
+    styles: { font: 'Inter', fontSize: 7.5 },
     headStyles: { fillColor: pdfBrand.teal, fontSize: 8.5, halign: 'center' },
     margin: { left: 10, right: 10 },
   });
@@ -174,6 +197,13 @@ function addClientBox(pdf, cursorY, { clientName, clientPhone, clientEmail }) {
 
 async function buildBasePdf({ title, client }) {
   const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+
+  const fonts = await loadPdfFonts();
+  pdf.addFileToVFS('Inter-Regular.ttf', fonts.regular);
+  pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal');
+  pdf.addFileToVFS('Inter-Bold.ttf', fonts.bold);
+  pdf.addFont('Inter-Bold.ttf', 'Inter', 'bold');
+  pdf.setFont('Inter', 'normal');
 
   let bannerImage = null;
   try {
@@ -227,7 +257,7 @@ export async function downloadLoanPdf({ client, loan, chartCanvas, tableRows }) 
       ['Total payable', fmt(loan.totalPayable)],
     ],
     theme: 'striped',
-    styles: { fontSize: 9 },
+    styles: { font: 'Inter', fontSize: 9 },
     headStyles: { fillColor: pdfBrand.teal },
   });
   cursorY = pdf.lastAutoTable.finalY + 8;
@@ -264,7 +294,7 @@ export async function downloadPlannerPdf({ client, result, sipChartCanvas, swpCh
       ['SWP total withdrawal', fmt(result.totalWithdrawal)],
     ],
     theme: 'striped',
-    styles: { fontSize: 9 },
+    styles: { font: 'Inter', fontSize: 9 },
     headStyles: { fillColor: pdfBrand.teal },
   });
   cursorY = pdf.lastAutoTable.finalY + 8;
