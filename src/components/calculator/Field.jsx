@@ -1,13 +1,19 @@
+import { forwardRef } from 'react';
+
 const inputClasses =
   'w-full [appearance:textfield] border rounded-lg px-3 py-[11px] font-inherit text-[15px] text-ink outline-none bg-white transition-all focus:shadow-[0_0_0_3px_rgba(27,107,42,0.15)]';
 
-export default function Field({ label, unit, id, readOnly = false, required = false, error, hint, ...inputProps }) {
+const Field = forwardRef(function Field(
+  { label, unit, id, readOnly = false, required = false, error, hint, ...inputProps },
+  ref,
+) {
   return (
     <div className="mb-[15px]">
       <label htmlFor={id} className="flex gap-1 text-[13px] font-bold mb-[7px]">
         {label} {required && <span className="text-red-500">*</span>} {unit && <span className="text-primary">{unit}</span>}
       </label>
       <input
+        ref={ref}
         id={id}
         readOnly={readOnly}
         aria-invalid={Boolean(error)}
@@ -26,4 +32,6 @@ export default function Field({ label, unit, id, readOnly = false, required = fa
       )}
     </div>
   );
-}
+});
+
+export default Field;

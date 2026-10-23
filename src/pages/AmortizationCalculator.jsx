@@ -46,13 +46,53 @@ export default function AmortizationCalculator() {
   const [loanAmount, setLoanAmount] = useState(2700000);
   const [loanRate, setLoanRate] = useState(7.5);
   const [loanYears, setLoanYears] = useState(15);
+  // Set once the user drives the calculator from the "Tenure (EMI)" field
+  // instead of "Tenure (Years)". While active, the schedule is simulated
+  // from this literal EMI rather than a formula-derived one, so the EMI
+  // column always shows exactly what was typed.
+  const [emiOverride, setEmiOverride] = useState(null);
 
   const loan = useMemo(
-    () => computeLoan({ loanAmount: Math.max(0, loanAmount || 0), loanRate: Math.max(0, loanRate || 0), loanYears: Math.max(0, loanYears || 0) }),
-    [loanAmount, loanRate, loanYears],
+    () =>
+      computeLoan({
+        loanAmount: Math.max(0, loanAmount || 0),
+        loanRate: Math.max(0, loanRate || 0),
+        loanYears: Math.max(0, loanYears || 0),
+        fixedEmi: emiOverride,
+      }),
+    [loanAmount, loanRate, loanYears, emiOverride],
   );
 
+  // Keep a draft while editing EMI; otherwise display the years-derived EMI.
+  const [emiInput, setEmiInput] = useState(null);
+  const [emiError, setEmiError] = useState(null);
+
+  const updateEmiInput = (value) => {
+    setEmiInput(value);
+    const emiValue = Number(value);
+    if (!Number.isFinite(emiValue) || emiValue <= 0) {
+      setEmiError(value.trim() ? 'Enter an EMI greater than 0.' : null);
+      return;
+    }
+
+    setEmiError(null);
+    setEmiOverride(emiValue);
+  };
+
+  const cannotRepay = loan.tenureMonths === null;
+  const repaymentError = cannotRepay
+    ? `This EMI cannot repay the loan. Enter more than ${money.format(Math.max(0, loanAmount) * Math.max(0, loanRate) / 1200)} to cover monthly interest and reduce the balance.`
+    : null;
+
+  // Derive the display directly so EMI changes cannot race a syncing effect.
+  const displayedYears = emiOverride == null
+    ? loanYears
+    : cannotRepay ? '' : Math.round((loan.tenureMonths / 12) * 100) / 100;
+
   const chartRef = useLineChart(loan.points, '#1B6B2A', 12);
+  // True when the EMI doesn't even cover the interest, so the balance grows
+  // instead of shrinking (only reachable via a very low "Tenure (EMI)" entry).
+  const isNegativelyAmortizing = loan.rows.length > 0 && loan.rows.at(-1).balance >= loan.rows[0].balance;
 
   const tableRows = loan.rows.map((row) => [
     String(row.month),
@@ -63,6 +103,7 @@ export default function AmortizationCalculator() {
   ]);
 
   const handleDownload = async () => {
+    if (cannotRepay) return;
     const errors = validateClientDetails({ clientName, clientPhone, clientEmail });
     setClientErrors(errors);
     if (Object.keys(errors).length > 0) {
@@ -165,13 +206,36 @@ export default function AmortizationCalculator() {
               onKeyDown={blockInvalidNumberKeys}
             />
             <Field
+              id="loanEmiInput"
+              label="Tenure (EMI)"
+              unit="₹"
+              type="number"
+              inputMode="numeric"
+              error={emiError || repaymentError}
+              hint="Type a target EMI to solve for the tenure needed to hit it."
+              value={emiInput ?? (loan.emi ? String(Math.round(loan.emi)) : '')}
+              onChange={(e) => {
+                updateEmiInput(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                blockInvalidNumberKeys(e);
+                if (e.key === 'Enter') e.target.blur();
+              }}
+            />
+            <Field
               id="loanYears"
               label="Tenure (Years)"
               unit="years"
               type="number"
               inputMode="decimal"
-              value={loanYears}
-              onChange={(e) => setLoanYears(Number(e.target.value))}
+              step="any"
+              value={displayedYears}
+              onChange={(e) => {
+                setLoanYears(Number(e.target.value));
+                setEmiOverride(null);
+                setEmiInput(null);
+                setEmiError(null);
+              }}
               onKeyDown={blockInvalidNumberKeys}
             />
             <Field
@@ -181,7 +245,7 @@ export default function AmortizationCalculator() {
               type="number"
               inputMode="numeric"
               readOnly
-              value={loan.tenureMonths}
+              value={loan.tenureMonths ?? ''}
             />
           </div>
 
@@ -191,6 +255,7 @@ export default function AmortizationCalculator() {
 
           <button
             type="button"
+            disabled={cannotRepay}
             onClick={handleDownload}
             className="w-full justify-center mt-[18px] inline-flex items-center gap-2 bg-primary text-white rounded-full px-7 py-3 font-semibold text-[0.95rem] transition-all hover:bg-primary-dark hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(27,107,42,0.3)]"
           >
@@ -202,9 +267,9 @@ export default function AmortizationCalculator() {
         <>
           <SummaryGrid
             metrics={[
-              { label: 'Tenure (months)', value: `${loan.tenureMonths} months` },
+              { label: 'Tenure (months)', value: cannotRepay ? 'No finite tenure' : `${loan.tenureMonths} months` },
               { label: 'EMI', value: money.format(loan.emi), variant: 'primary' },
-              { label: 'Total interest', value: money.format(loan.totalInterest), variant: 'success' },
+              { label: 'Total interest', value: cannotRepay ? '—' : money.format(loan.totalInterest), variant: 'success' },
             ]}
           />
 
@@ -212,16 +277,16 @@ export default function AmortizationCalculator() {
             className="mb-[18px]"
             title="Loan repayment schedule"
             subtitleLabel="Total payable"
-            subtitleValue={money.format(loan.totalPayable)}
+            subtitleValue={cannotRepay ? '—' : money.format(loan.totalPayable)}
             columns={['No.', 'EMI', 'Interest', 'Principal', 'Balance O/S']}
             rows={tableRows}
-            emptyMessage="Enter a loan tenure."
+            emptyMessage={repaymentError || "Enter a loan tenure."}
           />
 
           <ChartCard
             className="mt-5"
             title="Outstanding loan balance"
-            subtitle="Balance reduces with every EMI"
+            subtitle={cannotRepay ? repaymentError : isNegativelyAmortizing ? "This EMI doesn't cover the interest, so the balance grows" : 'Balance reduces with every EMI'}
             canvasRef={chartRef}
             ariaLabel="Loan balance chart"
           />

@@ -2,6 +2,7 @@
 
 # Node / Vite
 node_modules/
+.vite/
 dist/
 dist-ssr/
 *.local

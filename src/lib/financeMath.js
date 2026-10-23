@@ -113,23 +113,71 @@ export function computeSipSwp({
   };
 }
 
-/** Loan amortization schedule, mirroring the original renderLoan. */
-export function computeLoan({ loanAmount, loanRate, loanYears }) {
-  const annualRate = loanRate / 100;
-  const tenureMonths = Math.floor(loanYears * 12);
-  const monthlyRate = annualRate / 12;
-  const emi = tenureMonths
-    ? monthlyRate
-      ? (loanAmount * monthlyRate * (1 + monthlyRate) ** tenureMonths) / ((1 + monthlyRate) ** tenureMonths - 1)
-      : loanAmount / tenureMonths
-    : 0;
+// The longest schedule this calculator will ever render — real payoff
+// lengths are used as-is up to this point. Beyond it (an EMI so close to the
+// interest-only payment that payoff would take over a century, or one that
+// never pays off at all), the schedule is capped to this preview window.
+const MAX_SIMULATION_MONTHS = 100 * 12;
+
+/**
+ * Loan amortization schedule, mirroring the original renderLoan.
+ *
+ * Pass `fixedEmi` to drive the schedule from a literal monthly payment
+ * (the "Tenure (EMI)" field) instead of deriving EMI from `loanYears` via
+ * the standard formula. The exact number of months needed to clear the
+ * balance at that EMI is solved up front (however long that actually is —
+ * years and months always reflect the real payoff), and the simulation
+ * fills in the month-by-month schedule for exactly that many months. If the
+ * EMI doesn't even cover the monthly interest, there is no finite payoff —
+ * the balance grows instead of shrinking (negative amortization), and the
+ * schedule only previews a bounded window of that growth.
+ */
+export function computeLoan({ loanAmount, loanRate, loanYears, fixedEmi }) {
+  const monthlyRate = loanRate / 100 / 12;
+  const useFixedEmi = Boolean(fixedEmi);
+
+  // An EMI at or below monthly interest never reduces the principal.
+  // There is no repayment schedule or finite total to report in this case.
+  if (useFixedEmi && loanAmount > 0 && fixedEmi <= loanAmount * monthlyRate) {
+    return {
+      tenureMonths: null,
+      emi: fixedEmi,
+      totalInterest: null,
+      totalPayable: null,
+      rows: [],
+      points: [],
+    };
+  }
+
+  let maxMonths;
+  if (useFixedEmi) {
+    if (!monthlyRate) {
+      maxMonths = Math.min(MAX_SIMULATION_MONTHS, Math.ceil(loanAmount / fixedEmi));
+    } else {
+      const minEmi = loanAmount * monthlyRate;
+      const exactMonths =
+        fixedEmi > minEmi ? Math.ceil(Math.log(fixedEmi / (fixedEmi - minEmi)) / Math.log(1 + monthlyRate)) : Infinity;
+      maxMonths = Math.min(MAX_SIMULATION_MONTHS, exactMonths);
+    }
+  } else {
+    maxMonths = Math.floor(loanYears * 12);
+  }
+
+  const emi = useFixedEmi
+    ? fixedEmi
+    : maxMonths
+      ? monthlyRate
+        ? (loanAmount * monthlyRate * (1 + monthlyRate) ** maxMonths) / ((1 + monthlyRate) ** maxMonths - 1)
+        : loanAmount / maxMonths
+      : 0;
 
   let balance = loanAmount;
   let totalInterest = 0;
   const rows = [];
   const points = [];
+  let month = 0;
 
-  for (let month = 1; month <= tenureMonths; month += 1) {
+  for (month = 1; month <= maxMonths; month += 1) {
     const interest = balance * monthlyRate;
     const principal = Math.min(balance, emi - interest);
     const payment = Math.min(emi, balance + interest);
@@ -137,10 +185,13 @@ export function computeLoan({ loanAmount, loanRate, loanYears }) {
     totalInterest += interest;
     points.push(balance);
     rows.push({ month, payment, interest, principal, balance });
+    // Floating point can leave a fractional-paisa residual instead of
+    // exactly 0, which would otherwise take one extra month to clear.
+    if (useFixedEmi && balance < 0.01) break;
   }
 
   return {
-    tenureMonths,
+    tenureMonths: useFixedEmi ? Math.min(month, maxMonths) : maxMonths,
     emi,
     totalInterest,
     totalPayable: loanAmount + totalInterest,

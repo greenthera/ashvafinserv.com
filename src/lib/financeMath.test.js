@@ -92,6 +92,55 @@ describe('computeLoan — Amortization Calculator regression baseline', () => {
   });
 });
 
+describe('computeLoan with fixedEmi — drives the schedule from a literal EMI for the "Tenure (EMI)" field', () => {
+  it('uses the given EMI exactly, unlike the formula-derived EMI for the same tenure', () => {
+    const loan = computeLoan({ loanAmount: 2700000, loanRate: 7.5, fixedEmi: 30000 });
+    expect(loan.emi).toBe(30000);
+  });
+
+  it('round-trips with the years-driven path: paying the formula EMI for a known tenure pays it off in the same number of months', () => {
+    const defaults = { loanAmount: 2700000, loanRate: 7.5, loanYears: 15 };
+    const yearsLoan = computeLoan(defaults);
+
+    const emiLoan = computeLoan({ loanAmount: defaults.loanAmount, loanRate: defaults.loanRate, fixedEmi: yearsLoan.emi });
+    expect(emiLoan.tenureMonths).toBe(yearsLoan.tenureMonths);
+    expect(Math.round(emiLoan.totalInterest)).toBe(Math.round(yearsLoan.totalInterest));
+  });
+
+  it('matches straight-line amortization (months = principal / EMI) at zero interest', () => {
+    const loan = computeLoan({ loanAmount: 120000, loanRate: 0, fixedEmi: 10000 });
+    expect(loan.tenureMonths).toBe(12);
+    expect(loan.rows.at(-1).balance).toBeLessThan(1);
+  });
+
+  it.each([1000, 10000, 16875])('reports no finite payoff for EMI %s at or below monthly interest', (fixedEmi) => {
+    const loan = computeLoan({ loanAmount: 2700000, loanRate: 7.5, fixedEmi });
+    expect(loan.emi).toBe(fixedEmi);
+    expect(loan.tenureMonths).toBeNull();
+    expect(loan.totalInterest).toBeNull();
+    expect(loan.totalPayable).toBeNull();
+    expect(loan.rows).toEqual([]);
+    expect(loan.points).toEqual([]);
+  });
+
+  it('uses the real payoff length even when it runs well past the old 50-year cap, as long as it is finite', () => {
+    // Just above the interest-only payment (16,875) — technically amortizes,
+    // but very slowly, taking far longer than 50 years (600 months).
+    const loan = computeLoan({ loanAmount: 2700000, loanRate: 7.5, fixedEmi: 17000 });
+
+    expect(loan.tenureMonths).toBeGreaterThan(600);
+    expect(loan.tenureMonths).toBeLessThan(1200);
+    expect(loan.rows.at(-1).balance).toBeLessThan(1);
+    expect(loan.rows).toHaveLength(loan.tenureMonths);
+  });
+
+  it('stops as soon as the balance clears instead of running the full simulation cap', () => {
+    const loan = computeLoan({ loanAmount: 2700000, loanRate: 7.5, fixedEmi: 30000 });
+    expect(loan.tenureMonths).toBeLessThan(200);
+    expect(loan.rows.at(-1).balance).toBeLessThan(1);
+  });
+});
+
 describe('computeSipSwp — SIP & SWP Calculator regression baseline', () => {
   // These are the calculator's own default field values.
   const defaults = {
